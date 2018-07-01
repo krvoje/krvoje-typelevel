@@ -47,8 +47,14 @@ object |+| {
 
 
 object Natural {
+  type One = Successor[Zero]
+  type Two = Successor[One]
+  type Three = Successor[Two]
+
   val Zero = new Zero
   val One = Successor(Zero)
+  val Two = Successor(One)
+  val Three = Successor(Two)
 
   private val cache: mutable.Map[Int, Natural] = mutable.Map.empty[Int, Natural]
 
@@ -59,10 +65,6 @@ object Natural {
 
     cache(number)
   }
-
-  /*def instance[Z <: Natural](implicit classTag: ClassTag[Z]): Natural[Z] = Z match {
-
-  }*/
 
   private def fromInt(number: Int): Natural = {
     require(number >= 0, "Cannot make a natural number from a negative integer value.")
