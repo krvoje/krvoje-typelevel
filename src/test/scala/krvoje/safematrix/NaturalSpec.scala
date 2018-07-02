@@ -1,7 +1,6 @@
 package krvoje.safematrix
 
-import krvoje.safematrix.natural.Natural._
-import krvoje.safematrix.natural.{Natural, Successor, Zero, |+|}
+import krvoje.safematrix.natural._
 import org.scalacheck.Gen._
 import org.scalacheck.Prop._
 import org.scalacheck._
@@ -35,15 +34,63 @@ class NaturalSpec extends Properties("Natural") {
   }
 
   property("Typelevel stuff - if something's wrong these wont compile") = {
-    def zeroPlusZero(implicit sum: Zero |+| Zero) = (Zero + Zero).toInt == 0
-    def zeroPlusOne(implicit sum: Successor[Zero] |+| Zero) = (One + Zero).toInt == 1
-    def onePlusZero(implicit sum: Zero |+| Successor[Zero]) = (Zero + One).toInt == 1
-    def onePlusOne(implicit sum: Successor[Zero] |+| Successor[Zero]) = (One + One).toInt == 2
+    import Natural.{One, Two, Three, Four}
+    def zeroPlusZero(implicit sum: Zero |+| Zero) = true
+    def zeroPlusOne(implicit sum: Successor[Zero] |+| Zero) = true
+    def onePlusZero(implicit sum: Zero |+| Successor[Zero]) = true
+    def onePlusOne(implicit sum: Successor[Zero] |+| Successor[Zero]) = true
+
+    def zeroLTEQZero(implicit proof: Zero <= Zero) = true
+    def zeroLTEQOne(implicit proof: Zero <= One) = true
+    def zeroLTEQThree(implicit proof: Zero <= Three) = true
+
+    //def oneLTEQZero(implicit proof: <= [Natural.One, Zero]) = true
+    def oneLTEQOne(implicit proof: One <= One) = true
+    def oneLTEQThree(implicit proof: One <= Three) = true
+    def oneLTEQFour(implicit proof: One <= Four) = true
+
+    def twoLTEQTwo(implicit proof: Two <= Two) = true
+    def twoLTEQThree(implicit proof: Two <= Natural.Three) = true
+    def twoLTEQFour(implicit proof: Two <= Four) = true
+
+    //def zeroLTZero(implicit proof: Zero < Zero) = true
+    def zeroLTOne(implicit proof: Zero < One) = true
+    def zeroLTThree(implicit proof: Zero < Three) = true
+    //def oneLTZero(implicit proof: < [Natural.One, Zero]) = true
+    //def oneLTOne(implicit proof: One < One) = true
+    def oneLTThree(implicit proof: One < Three) = true
+    def oneLTFour(implicit proof: One < Four) = true
+    //def twoLTTwo(implicit proof: Two < Two) = true
+    def twoLTThree(implicit proof: Two < Natural.Three) = true
+    def twoLTFour(implicit proof: Two < Four) = true
+
 
     zeroPlusZero
     zeroPlusOne
     onePlusZero
     onePlusOne
+
+    zeroLTEQZero
+    zeroLTEQOne
+    zeroLTEQThree
+    //oneLTEQZero // Should not compile
+    oneLTEQOne
+    oneLTEQThree
+    oneLTEQFour
+    //twoLTEQTwo
+    twoLTEQThree
+    twoLTEQFour
+
+    //zeroLTZero
+    zeroLTOne
+    zeroLTThree
+    //oneLTZero // Should not compile
+    //oneLTOne
+    oneLTThree
+    oneLTFour
+    //twoLTTwo
+    twoLTThree
+    twoLTFour
   }
 
 }

@@ -4,14 +4,14 @@ import krvoje.safematrix.natural._
 
 import scala.reflect.ClassTag
 
-trait Matrix[M <: Natural, N <: Natural, T] {
-  def +(that: Matrix[M, N, T]): Matrix[M, N, T]
-  def -(that: Matrix[M, N, T]): Matrix[M, N, T]
-  def *[P <: Natural](that: Matrix[N, P, T]): Matrix[M, P, T]
-  def transpose: Matrix[N,M,T]
+trait Matrix[Rows <: Natural, Cols <: Natural, T] {
+  def +(that: Matrix[Rows, Cols, T]): Matrix[Rows, Cols, T]
+  def -(that: Matrix[Rows, Cols, T]): Matrix[Rows, Cols, T]
+  def *[P <: Natural](that: Matrix[Cols, P, T]): Matrix[Rows, P, T]
+  def transpose: Matrix[Cols,Rows,T]
 
-  def row(m: Natural): NatVect[N, T]
-  def col(n: Natural): NatVect[M, T]
+  def row(m: Natural): NatVect[Cols, T]
+  def col(n: Natural): NatVect[Rows, T]
 
   def get(row: Natural, col: Natural): T
 }
@@ -19,18 +19,14 @@ trait Matrix[M <: Natural, N <: Natural, T] {
 case class ArrayMatrix[M <: Natural, N <: Natural, T](
   m: M,
   n: N,
-  rows: Array[Array[T]]
+  rows: NatMatrix[M, N, T]
 )(implicit num: Numeric[T], classTag: ClassTag[T]) extends Matrix[M, N, T] {
-
-  // TODO: Type these instead of requiring
-  require(rows.length == m.toInt, "Invalid number of rows in matrix")
-  for(row <- rows) require(row.length == n.toInt, "Invalid number of cols in matrix")
 
   override def +(that: Matrix[M, N, T]): Matrix[M, N, T] = rowsOp(num.plus, that)
 
   override def -(that: Matrix[M, N, T]): Matrix[M, N, T] = rowsOp(num.minus, that)
 
-  override def get(row: Natural, col: Natural): T = rows(row.toInt)(col.toInt)
+  override def get(row: Natural, col: Natural): T = ???
 
   private def rowsOp[T](f: (T, T) => T, that: Matrix[M, N, T]): Matrix[M, N, T] = ???/*this.copy(rows = (for {
     row <- Range(0, m.toInt).toArray[Int]

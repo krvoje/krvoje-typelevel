@@ -14,7 +14,9 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 
-//scalacOptions ++= Seq("-Xlog-implicits")
+/*scalacOptions ++= Seq(
+  "-Xlog-implicit-conversions",
+  "-Xlog-implicits")*/
 
 testOptions in Test := Seq(
   Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1")
